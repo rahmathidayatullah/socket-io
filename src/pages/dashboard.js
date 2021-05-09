@@ -1,6 +1,14 @@
 import React from "react";
 
-export default function Dashboard() {
+export default function Dashboard(props) {
+  React.useEffect(() => {
+    const token = localStorage.getItem("CC_Token");
+    if (!token) {
+      props.history.push("/login");
+    } else {
+      props.history.push("/dashboard");
+    }
+  }, []);
   return (
     <div className="bg-gray-200 h-screen flex items-center justify-center">
       <div className="bg-white rounded-lg shadow-2xl p-5 max-w-min">
