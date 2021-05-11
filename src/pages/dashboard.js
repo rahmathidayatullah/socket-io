@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 export default function Dashboard(props) {
   const [chatrooms, setChatrooms] = React.useState([]);
-  console.log("chatrooms", chatrooms.data);
+
   const getChatrooms = () => {
     axios
       .get("https://server-chat-socket-io.herokuapp.com/api/chatroom", {
@@ -14,7 +14,6 @@ export default function Dashboard(props) {
       })
       .then((response) => {
         setChatrooms(response.data);
-        console.log("response", response);
       })
       .catch((err) => {
         setTimeout(getChatrooms, 3000);
