@@ -1,8 +1,9 @@
 import React from "react";
 import axios from "axios";
 import makeToast from "Toaster";
+import { withRouter } from "react-router";
 
-export default function Login(props) {
+const Login = (props) => {
   const emailRef = React.createRef();
   const passwordRef = React.createRef();
 
@@ -24,6 +25,7 @@ export default function Login(props) {
           makeToast("success", response.data.message);
           localStorage.setItem("CC_Token", response.data.token);
           props.history.push("/dashboard");
+          props.setupSocket();
         } else {
           makeToast("error", response.data.message);
         }
@@ -66,4 +68,6 @@ export default function Login(props) {
       </div>
     </div>
   );
-}
+};
+
+export default withRouter(Login);

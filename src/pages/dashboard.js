@@ -1,13 +1,28 @@
-import React from "react";
+import React, { useEffect } from "react";
+import axios from "axios";
+import { Link } from "react-router-dom";
 
 export default function Dashboard(props) {
-  React.useEffect(() => {
-    const token = localStorage.getItem("CC_Token");
-    if (!token) {
-      props.history.push("/login");
-    } else {
-      props.history.push("/dashboard");
-    }
+  const [chatrooms, setChatrooms] = React.useState([]);
+  console.log("chatrooms", chatrooms.data);
+  const getChatrooms = () => {
+    axios
+      .get("https://server-chat-socket-io.herokuapp.com/api/chatroom", {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("CC_Token"),
+        },
+      })
+      .then((response) => {
+        setChatrooms(response.data);
+        console.log("response", response);
+      })
+      .catch((err) => {
+        setTimeout(getChatrooms, 3000);
+      });
+  };
+
+  useEffect(() => {
+    getChatrooms();
   }, []);
   return (
     <div className="bg-gray-200 h-screen flex items-center justify-center">
@@ -27,22 +42,21 @@ export default function Dashboard(props) {
           Create chat room
         </button>
         <ul>
-          <li className="mt-4">
-            <div className="flex items-center justify-between">
-              <p className="text-sm font-semibold text-base">Happy newbie</p>
-              <button className="py-2 px-4 bg-green-400 hover:bg-green-300 duration-200 focus:outline-none outline-none text-white font-semibold rounded-md">
-                Join
-              </button>
-            </div>
-          </li>
-          <li className="mt-4">
-            <div className="flex items-center justify-between">
-              <p className="text-sm font-semibold text-base">Happy newbie</p>
-              <button className="py-2 px-4 bg-green-400 hover:bg-green-300 duration-200 focus:outline-none outline-none text-white font-semibold rounded-md">
-                Join
-              </button>
-            </div>
-          </li>
+          {chatrooms.data &&
+            chatrooms.data.map((chatroom) => (
+              <li className="mt-4">
+                <div className="flex items-center justify-between">
+                  <p className="text-sm font-semibold text-base">
+                    {chatroom.name}
+                  </p>
+                  <Link to={"/chatroom/" + chatroom._id}>
+                    <button className="py-2 px-4 bg-green-400 hover:bg-green-300 duration-200 focus:outline-none outline-none text-white font-semibold rounded-md">
+                      Join
+                    </button>
+                  </Link>
+                </div>
+              </li>
+            ))}
         </ul>
       </div>
     </div>
