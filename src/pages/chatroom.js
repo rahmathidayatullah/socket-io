@@ -67,7 +67,7 @@ const Chatroom = ({ match, socket }) => {
                 <div className="flex items-center">
                   <div className="flex">
                     <p
-                      className={`w-28 ${
+                      className={`w-40 font-semibold whitespace-nowrap ${
                         userId === messages.userId
                           ? "text-red-500"
                           : "text-blue-500"
